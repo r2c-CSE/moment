@@ -15,6 +15,7 @@ else
         echo "Running Full scan for branch: $CIRCLE_BRANCH"
         echo 'export SEMGREP_REPO_DISPLAY_NAME=<< pipeline.parameters.folder >>' >> $BASH_ENV
         echo "Service: << pipeline.parameters.folder >>"
+        pnpm install --lockfile-only
         semgrep ci --include=packages/<< pipeline.parameters.folder >> || true
         cd ..
     else

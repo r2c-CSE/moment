@@ -27,7 +27,5 @@ workflows:
   semgrep:
     jobs:
       - semgrep-scan:
-          parameters:
-            folder: "serviceB"
           context:
             - semgrep

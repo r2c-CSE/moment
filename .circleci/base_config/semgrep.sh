@@ -11,7 +11,7 @@ if [ -n "$PR_NUMBER" ]; then
     semgrep ci --baseline-commit=$(git merge-base main HEAD)
 else
     if [ "$CIRCLE_BRANCH" == "main" ]; then
-        service=<< pipeline.parameters.folder >>
+        service="<< pipeline.parameters.folder >>"
         echo "Service: $service"
         cd $service
         echo "Running Full scan for branch: $CIRCLE_BRANCH"

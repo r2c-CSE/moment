@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  semgrep-scan:
+  test:
     docker:
       - image: semgrep/semgrep
     parameters:
@@ -17,8 +17,9 @@ jobs:
               .circleci/base_config/semgrep.sh
 workflows:
   version: 2
-  semgrep:
+  dynamic:
     jobs:
-      - semgrep-scan:
-          context:
-            - semgrep
+      - call:
+          job: test
+          parameters:
+            folder: "serviceA"

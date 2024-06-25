@@ -20,7 +20,7 @@ jobs:
           command: chmod +x .circleci/base_config/semgrep.sh
       - run:
           name: Change Directory
-          command: command: cd << parameters.folder >>
+          command: cd << parameters.folder >>
       - run:
           name: Generate lock file
           command: pnpm install --lockfile-only

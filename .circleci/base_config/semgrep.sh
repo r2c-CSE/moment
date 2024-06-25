@@ -12,9 +12,10 @@ if [ -n "$PR_NUMBER" ]; then
 else
     if [ "$CIRCLE_BRANCH" == "main" ]; then
         echo "Running Full scan for branch: $CIRCLE_BRANCH"
+        echo "Service: $SERVICE"
         echo 'export SEMGREP_REPO_DISPLAY_NAME=$SERVICE' >> $BASH_ENV
         semgrep ci --include=packages/$SERVICE || true
     else
-        echo "Skipping full scan for branches different to development."
+        echo "Skipping full scan for branches different to main."
     fi
 fi

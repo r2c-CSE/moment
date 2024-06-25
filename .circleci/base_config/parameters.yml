@@ -4,4 +4,4 @@ parameters:
     default: 'development'
   folder:
     type: string
-    default: '.'
+    default: 'serviceA'

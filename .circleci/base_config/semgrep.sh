@@ -18,7 +18,7 @@ else
         echo 'export SEMGREP_REPO_DISPLAY_NAME=$service' >> $BASH_ENV
         echo "Service: $service"
         pnpm install --lockfile-only
-        semgrep ci --include=packages/<< pipeline.parameters.folder >> || true
+        semgrep ci --include=packages/$service || true
         cd ..
     else
         echo "Skipping full scan for branches different to main."

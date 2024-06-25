@@ -8,9 +8,9 @@ if [ -n "$PR_NUMBER" ]; then
     echo "Pull Request Number: $PR_NUMBER"
     echo 'export SEMGREP_PR_ID=$PR_NUMBER' >> $BASH_ENV
     git fetch origin "+refs/heads/*:refs/remotes/origin/*"
-    semgrep ci --baseline-commit=$(git merge-base development HEAD)
+    semgrep ci --baseline-commit=$(git merge-base main HEAD)
 else
-    if [ "$CIRCLE_BRANCH" == "development" ]; then
+    if [ "$CIRCLE_BRANCH" == "main" ]; then
         echo "Running Full scan for branch: $CIRCLE_BRANCH"
         echo 'export SEMGREP_REPO_DISPLAY_NAME=$SERVICE' >> $BASH_ENV
         semgrep ci --include=packages/$SERVICE || true

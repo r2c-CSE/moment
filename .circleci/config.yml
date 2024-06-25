@@ -1,15 +1,4 @@
-version: 2
-jobs:
-  dynamic:
-    jobs:
-      - call:
-          job: semgrep-scan
-          parameters:
-            folder: "serviceA"
-      - call:
-          job: semgrep-scan
-          parameters:
-            folder: "serviceB"
+
   semgrep-scan:
     docker:
       - image: semgrep/semgrep
@@ -36,6 +25,14 @@ workflows:
   version: 2
   semgrep:
     jobs:
+      - call:
+          job: semgrep-scan
+          parameters:
+            folder: "serviceA"
+      - call:
+          job: semgrep-scan
+          parameters:
+            folder: "serviceB"
       - semgrep-scan:
           context:
             - semgrep

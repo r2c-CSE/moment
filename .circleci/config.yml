@@ -13,6 +13,9 @@ jobs:
   semgrep-scan:
     docker:
       - image: semgrep/semgrep
+    parameters:
+      folder:
+        type: string
     steps:
       - checkout
       - run:

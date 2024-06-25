@@ -11,9 +11,12 @@ if [ -n "$PR_NUMBER" ]; then
     semgrep ci --baseline-commit=$(git merge-base main HEAD)
 else
     if [ "$CIRCLE_BRANCH" == "main" ]; then
+        cd << pipeline.parameters.folder >>
         echo "Running Full scan for branch: $CIRCLE_BRANCH"
+        echo 'export SEMGREP_REPO_DISPLAY_NAME=<< pipeline.parameters.folder >>' >> $BASH_ENV
         echo "Service: << pipeline.parameters.folder >>"
         semgrep ci --include=packages/<< pipeline.parameters.folder >> || true
+        cd ..
     else
         echo "Skipping full scan for branches different to main."
     fi

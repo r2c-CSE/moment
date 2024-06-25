@@ -3,11 +3,11 @@ jobs:
   dynamic:
     jobs:
       - call:
-          job: test
+          job: semgrep-scan
           parameters:
             folder: "serviceA"
       - call:
-          job: test
+          job: semgrep-scan
           parameters:
             folder: "serviceB"
   semgrep-scan:

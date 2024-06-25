@@ -1,0 +1,21 @@
+version: 2
+jobs:
+  semgrep-scan:
+    docker:
+      - image: returntocorp/semgrep
+    steps:
+      - checkout
+      - run:
+          name: Set script permissions
+          command: chmod +x .circleci/base_config/semgrep.sh
+      - run:
+          name: "Semgrep scan"
+          command: |
+              .circleci/base_config/semgrep.sh
+workflows:
+  version: 2
+  semgrep:
+    jobs:
+      - semgrep-scan:
+          context:
+            - semgrep

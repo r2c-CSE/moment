@@ -14,7 +14,6 @@ jobs:
       - run:
           name: "Semgrep scan"
           command: |
-              export SEMGREP_REPO_DISPLAY_NAME=monorepo/<< parameters.folder >>
               .circleci/base_config/semgrep.sh
 workflows:
   version: 2

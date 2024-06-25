@@ -24,7 +24,7 @@ jobs:
               .circleci/base_config/semgrep.sh
 workflows:
   version: 2
-  semgrep:
+  dynamic:
     jobs:
       - call:
           job: semgrep-scan
@@ -34,6 +34,6 @@ workflows:
           job: semgrep-scan
           parameters:
             folder: "serviceB"
-      - semgrep-scan:
-          context:
-            - semgrep
+      #- semgrep-scan:
+      #    context:
+      #      - semgrep

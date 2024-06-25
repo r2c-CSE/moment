@@ -11,6 +11,7 @@ if [ -n "$PR_NUMBER" ]; then
     semgrep ci --baseline-commit=$(git merge-base main HEAD)
 else
     if [ "$CIRCLE_BRANCH" == "main" ]; then
+        SERVICE="serviceA"
         echo "Running Full scan for branch: $CIRCLE_BRANCH"
         echo "Service: $SERVICE"
         echo 'export SEMGREP_REPO_DISPLAY_NAME=$SERVICE' >> $BASH_ENV

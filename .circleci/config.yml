@@ -12,12 +12,6 @@ jobs:
           name: Set permissions
           command: chmod +x .circleci/base_config/semgrep.sh
       - run:
-          name: Change Directory
-          command: cd << parameters.folder >>
-      - run:
-          name: Generate lock file
-          command: pnpm install --lockfile-only
-      - run:
           name: "Semgrep scan"
           command: |
               export SEMGREP_REPO_DISPLAY_NAME=monorepo/<< parameters.folder >>

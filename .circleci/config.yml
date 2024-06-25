@@ -1,16 +1,33 @@
 version: 2
 jobs:
+  dynamic:
+    jobs:
+      - call:
+          job: test
+          parameters:
+            folder: "serviceA"
+      - call:
+          job: test
+          parameters:
+            folder: "serviceB"
   semgrep-scan:
     docker:
-      - image: returntocorp/semgrep
+      - image: semgrep/semgrep
     steps:
       - checkout
       - run:
-          name: Set script permissions
+          name: Set permissions
           command: chmod +x .circleci/base_config/semgrep.sh
+      - run:
+          name: Change Directory
+          command: command: cd << parameters.folder >>
+      - run:
+          name: Generate lock file
+          command: pnpm install --lockfile-only
       - run:
           name: "Semgrep scan"
           command: |
+              export SEMGREP_REPO_DISPLAY_NAME=monorepo/<< parameters.folder >>
               .circleci/base_config/semgrep.sh
 workflows:
   version: 2

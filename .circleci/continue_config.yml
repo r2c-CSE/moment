@@ -3,8 +3,6 @@ version: 2.1
 orbs:
   maven: circleci/maven@1.2.0
 
-# the default pipeline parameters, which will be updated according to
-# the results of the path-filtering orb
 parameters:
   run-build-service-A-job:
     type: boolean
@@ -13,38 +11,55 @@ parameters:
     type: boolean
     default: false
 
-# here we specify our workflows, most of which are conditionally
-# executed based upon pipeline parameter values. Each workflow calls a
-# specific job. In this example all jobs are preconfigured in the Maven orb
 workflows:
-  # when pipeline parameter run-build-service-1-job is true, the
-  # build-service-A job is triggered.
-  service-1:
+  service-A:
     when: << pipeline.parameters.run-build-service-A-job >>
     jobs:
-      - maven/test:
-          name: build-service-A
-          command: 'echo serviceA'
-          app_src_directory: 'serviceA'
-  # when pipeline parameter run-build-service-B-job is true, the
-  # build-service-2 job is triggered.
-  service-2:
+      semgrep:
+        docker:
+          - image: semgrep/semgrep
+        steps:
+          - checkout
+          - run:
+              name: Set permissions
+              command: chmod +x .circleci/base_config/semgrep.sh
+          - run:
+              name: "Semgrep pull request scan"
+              app_src_directory: 'serviceA'
+              command: |
+                  .circleci/base_config/semgrep.sh
+  service-B:
     when: << pipeline.parameters.run-build-service-B-job >>
     jobs:
-      - maven/test:
-          name: build-service-B
-          command: 'echo serviceB'
-          app_src_directory: 'serviceB'
+      semgrep:
+        docker:
+          - image: semgrep/semgrep
+        steps:
+          - checkout
+          - run:
+              name: Set permissions
+              command: chmod +x .circleci/base_config/semgrep.sh
+          - run:
+              name: "Semgrep pull request scan"
+              app_src_directory: 'serviceA'
+              command: |
+                  .circleci/base_config/semgrep.sh
   # when pipeline parameter, run-build-service-A-job OR
-  # run-build-service-B-job is true, run-integration-tests job is
-  # triggered. see:
-  # https://circleci.com/docs/configuration-reference/#logic-statements
-  # for more information.
-  run-semgrep-tests:
+  # run-build-service-B-job is true, run semgrep full scans
+  run-semgrep-full-scans:
     when:
       or: [<< pipeline.parameters.run-build-service-A-job >>, << pipeline.parameters.run-build-service-B-job >>]
     jobs:
-      - maven/test:
-          name: run-semgrep-full-scan
-          command: 'echo running semgrep full scan'
-          app_src_directory: 'packages'
+      semgrep:
+        docker:
+          - image: semgrep/semgrep
+        steps:
+          - checkout
+          - run:
+              name: Set permissions
+              command: chmod +x .circleci/base_config/semgrep.sh
+          - run:
+              name: "Semgrep full scan"
+              app_src_directory: 'packages'
+              command: |
+                  .circleci/base_config/semgrep.sh

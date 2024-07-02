@@ -7,7 +7,7 @@ import moment from 'moment';
 
 
 class BranchesStatusDropdown extends React.Component {
-
+    // Adding a comment in this line
     static propTypes = {
         "deleted": PropTypes.bool.isRequired,
         "undeleted": PropTypes.bool.isRequired,

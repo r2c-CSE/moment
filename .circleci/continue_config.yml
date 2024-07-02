@@ -44,22 +44,3 @@ workflows:
               app_src_directory: 'serviceA'
               command: |
                   .circleci/base_config/semgrep.sh
-  # when pipeline parameter, run-build-service-A-job OR
-  # run-build-service-B-job is true, run semgrep full scans
-  run-semgrep-full-scans:
-    when:
-      or: [<< pipeline.parameters.run-build-service-A-job >>, << pipeline.parameters.run-build-service-B-job >>]
-    jobs:
-      semgrep:
-        docker:
-          - image: semgrep/semgrep
-        steps:
-          - checkout
-          - run:
-              name: Set permissions
-              command: chmod +x .circleci/base_config/semgrep.sh
-          - run:
-              name: "Semgrep full scan"
-              app_src_directory: 'packages'
-              command: |
-                  .circleci/base_config/semgrep.sh

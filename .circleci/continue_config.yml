@@ -6,10 +6,10 @@ orbs:
 # the default pipeline parameters, which will be updated according to
 # the results of the path-filtering orb
 parameters:
-  run-build-service-1-job:
+  run-build-service-A-job:
     type: boolean
     default: false
-  run-build-service-2-job:
+  run-build-service-B-job:
     type: boolean
     default: false
 
@@ -18,33 +18,33 @@ parameters:
 # specific job. In this example all jobs are preconfigured in the Maven orb
 workflows:
   # when pipeline parameter run-build-service-1-job is true, the
-  # build-service-1 job is triggered.
+  # build-service-A job is triggered.
   service-1:
-    when: << pipeline.parameters.run-build-service-1-job >>
+    when: << pipeline.parameters.run-build-service-A-job >>
     jobs:
       - maven/test:
-          name: build-service-1
-          command: 'install -DskipTests'
-          app_src_directory: 'service1'
-  # when pipeline parameter run-build-service-2-job is true, the
+          name: build-service-A
+          command: 'echo serviceA'
+          app_src_directory: 'serviceA'
+  # when pipeline parameter run-build-service-B-job is true, the
   # build-service-2 job is triggered.
   service-2:
-    when: << pipeline.parameters.run-build-service-2-job >>
+    when: << pipeline.parameters.run-build-service-B-job >>
     jobs:
       - maven/test:
-          name: build-service-2
-          command: 'install -DskipTests'
-          app_src_directory: 'service2'
-  # when pipeline parameter, run-build-service-1-job OR
-  # run-build-service-2-job is true, run-integration-tests job is
+          name: build-service-B
+          command: 'echo serviceB'
+          app_src_directory: 'serviceB'
+  # when pipeline parameter, run-build-service-A-job OR
+  # run-build-service-B-job is true, run-integration-tests job is
   # triggered. see:
   # https://circleci.com/docs/configuration-reference/#logic-statements
   # for more information.
-  run-integration-tests:
+  run-semgrep-tests:
     when:
-      or: [<< pipeline.parameters.run-build-service-1-job >>, << pipeline.parameters.run-build-service-2-job >>]
+      or: [<< pipeline.parameters.run-build-service-A-job >>, << pipeline.parameters.run-build-service-B-job >>]
     jobs:
       - maven/test:
-          name: run-integration-tests
-          command: '-X verify'
-          app_src_directory: 'tests'
+          name: run-semgrep-full-scan
+          command: 'echo running semgrep full scan'
+          app_src_directory: 'packages'

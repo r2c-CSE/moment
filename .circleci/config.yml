@@ -1,25 +1,28 @@
-version: 2
-jobs:
-  test:
-    docker:
-      - image: semgrep/semgrep
-    parameters:
-      folder:
-        type: string
-    steps:
-      - checkout
-      - run:
-          name: Set permissions
-          command: chmod +x .circleci/base_config/semgrep.sh
-      - run:
-          name: "Semgrep scan"
-          command: |
-              .circleci/base_config/semgrep.sh
+version: 2.1
+
+# define this file as the setup phase of your dynamic configuration
+setup: true
+
+# use the path-filtering orb to continue a pipeline based on
+# the path of an updated set of files
+orbs:
+  path-filtering: circleci/path-filtering@1
+
 workflows:
-  version: 2
-  dynamic:
+  always-run:
     jobs:
-      - call:
-          job: test
-          parameters:
-            folder: "serviceA"
+      # the path-filtering/filter job determines which pipeline
+      # parameters to update.
+      - path-filtering/filter:
+          name: check-updated-files
+          # 3-column, whitespace-delimited mapping. One mapping per
+          # line:
+          # <regex path-to-test> <parameter-to-set> <value-of-pipeline-parameter>
+          mapping: |
+            packages/serviceA/.* run-build-service-A-job true
+            packages/serviceB/.* run-build-service-B-job true
+          base-revision: main
+          # this is the path of the configuration we should trigger once
+          # path filtering and pipeline parameter value updates are
+          # complete.
+          config-path: .circleci/continue_config.yml # this is the default so not actually required but left in to illustrate options

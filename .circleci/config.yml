@@ -22,7 +22,4 @@ workflows:
             packages/serviceA/.* run-build-service-A-job true
             packages/serviceB/.* run-build-service-B-job true
           base-revision: main
-          # this is the path of the configuration we should trigger once
-          # path filtering and pipeline parameter value updates are
-          # complete.
-          config-path: .circleci/continue_config.yml # this is the default so not actually required but left in to illustrate options
+          config-path: .circleci/continue_config.yml 

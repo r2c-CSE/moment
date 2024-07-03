@@ -4,16 +4,13 @@ orbs:
   maven: circleci/maven@1.2.0
 
 parameters:
-  run-build-service-A-job:
-    type: boolean
-    default: false
-  run-build-service-B-job:
-    type: boolean
-    default: false
+  service:
+    type: string
+    default: A
 
 workflows:
-  service-A:
-    when: << pipeline.parameters.run-build-service-A-job >>
+  service-semgrep:
+    when: << pipeline.parameters.service >> == "A"
     jobs:
       semgrep:
         docker:
@@ -28,19 +25,6 @@ workflows:
               app_src_directory: 'serviceA'
               command: |
                   .circleci/base_config/semgrep.sh
-  service-B:
-    when: << pipeline.parameters.run-build-service-B-job >>
-    jobs:
-      semgrep:
-        docker:
-          - image: semgrep/semgrep
-        steps:
-          - checkout
-          - run:
-              name: Set permissions
-              command: chmod +x .circleci/base_config/semgrep.sh
-          - run:
-              name: "Semgrep pull request scan"
-              app_src_directory: 'serviceA'
+              app_src_directory: 'packages/serviceA'
               command: |
                   .circleci/base_config/semgrep.sh

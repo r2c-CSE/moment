@@ -19,7 +19,7 @@ workflows:
           # line:
           # <regex path-to-test> <parameter-to-set> <value-of-pipeline-parameter>
           mapping: |
-            packages/serviceA/.* run-build-service-A-job true
-            packages/serviceB/.* run-build-service-B-job true
+            packages/serviceA/.* service A
+            packages/serviceB/.* service B
           base-revision: main
           config-path: .circleci/continue_config.yml 

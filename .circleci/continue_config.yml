@@ -6,11 +6,11 @@ orbs:
 parameters:
   service:
     type: string
-    default: A
+    default: "A"
 
 workflows:
   service-semgrep:
-    when: << pipeline.parameters.service >> == "A"
+    when: << pipeline.parameters.service  == "A" >>
     jobs:
       semgrep:
         docker:
